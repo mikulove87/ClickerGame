@@ -96,14 +96,21 @@ fun UpgradeCard(
     currentPoint: Double,
     onUpgrade: () -> Unit,
 ) {
-    Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(upgrade.title, style = MaterialTheme.typography.titleMedium)
-                Text("Cost: %.0f points".format(upgrade.cost), style = MaterialTheme.typography.labelLarge)
+                Text(
+                    "Cost: %.0f points".format(upgrade.cost),
+                    style = MaterialTheme.typography.labelLarge
+                )
                 if (upgrade.description != null) {
                     Text(upgrade.description, style = MaterialTheme.typography.bodySmall)
                 }
@@ -132,7 +139,7 @@ fun UpgradeCardPreview() {
                 currentPoint = 10.0,
                 onUpgrade = {},
 
-            )
+                )
             UpgradeCard(
                 Upgrade(
                     title = "No description",
