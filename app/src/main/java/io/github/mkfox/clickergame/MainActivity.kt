@@ -43,8 +43,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ClickerGameApp() {
-    var point by rememberSaveable { mutableStateOf(0L) }
-    var gain by rememberSaveable { mutableStateOf(1L) }
+    var point by rememberSaveable { mutableStateOf(0.0) }
+    var gain by rememberSaveable { mutableStateOf(1.0) }
+    var pointerCost by rememberSaveable { mutableStateOf(10.0) }
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
@@ -60,18 +61,30 @@ fun ClickerGameApp() {
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Upgrade Menu")
                 UpgradeCard(
                     title = "Pointer",
-                    cost = 10L,
+                    cost = pointerCost,
                     currentPoint = point,
                     onUpgrade = {
                         point -= it
+                        pointerCost *= 1.2
                         gain++
                     },
                     description = "More points per click!"
+                )
+                UpgradeCard(
+                    title = "Auto Clicker",
+                    cost = 100.0,
+                    currentPoint = point,
+                    onUpgrade = {
+                        point -= it
+                        // TODO: Auto Clicker
+                    },
+                    description = "TODO: Auto Clicker"
                 )
             }
         }
@@ -80,8 +93,8 @@ fun ClickerGameApp() {
 
 @Composable
 fun Clicker(
-    point: Long,
-    gain: Long,
+    point: Double,
+    gain: Double,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -90,8 +103,8 @@ fun Clicker(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Point: $point", style = MaterialTheme.typography.titleLarge)
-        Text("+$gain per click", style = MaterialTheme.typography.bodyLarge)
+        Text("Point: %.0f".format(point), style = MaterialTheme.typography.titleLarge)
+        Text("+%.0f per click".format(gain), style = MaterialTheme.typography.bodyLarge)
         Spacer(Modifier.height(16.dp))
         Button(onClick = onClick) {
             Text("Click here")
@@ -102,19 +115,19 @@ fun Clicker(
 @Composable
 fun UpgradeCard(
     title: String,
-    cost: Long,
-    currentPoint: Long,
-    onUpgrade: (Long) -> Unit,
+    cost: Double,
+    currentPoint: Double,
+    onUpgrade: (Double) -> Unit,
     description: String = "",
 ) {
-    Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+    Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
             ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
-                Text("Cost: $cost points", style = MaterialTheme.typography.labelLarge)
+                Text("Cost: %.0f points".format(cost), style = MaterialTheme.typography.labelLarge)
                 Text(description, style = MaterialTheme.typography.bodySmall)
             }
             OutlinedButton(
@@ -133,8 +146,8 @@ fun UpgradeCardPreview() {
     ClickerGameTheme {
         UpgradeCard(
             title = "Pointer",
-            cost = 10L,
-            currentPoint = 10L,
+            cost = 10.0,
+            currentPoint = 10.0,
             onUpgrade = {},
             description = "Descrioption"
         )
