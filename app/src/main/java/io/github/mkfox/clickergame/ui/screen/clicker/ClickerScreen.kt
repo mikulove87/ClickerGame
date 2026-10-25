@@ -94,7 +94,7 @@ fun Clicker(
 fun UpgradeCard(
     upgrade: Upgrade,
     currentPoint: Double,
-    onUpgrade: (Double) -> Unit,
+    onUpgrade: () -> Unit,
 ) {
     Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         Row(
@@ -109,7 +109,7 @@ fun UpgradeCard(
                 }
             }
             OutlinedButton(
-                onClick = { onUpgrade(upgrade.cost) },
+                onClick = { onUpgrade() },
                 enabled = currentPoint >= upgrade.cost
             ) {
                 Text("Upgrade")
