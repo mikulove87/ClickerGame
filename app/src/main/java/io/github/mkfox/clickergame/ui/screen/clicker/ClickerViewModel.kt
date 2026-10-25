@@ -1,18 +1,22 @@
 package io.github.mkfox.clickergame.ui.screen.clicker
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.mkfox.clickergame.data.Upgrade
-import io.github.mkfox.clickergame.data.Upgrades
+import io.github.mkfox.clickergame.data.InitialUpgrades
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 data class ClickerUiState(
     val point: Double = 0.0,
     val perClick: Double = 1.0,
     val perSecond: Double = 0.0,
-    val upgrades: List<Upgrade> = Upgrades,
+    val upgrades: List<Upgrade> = InitialUpgrades,
 )
 
 class ClickerViewModel : ViewModel() {
@@ -21,11 +25,28 @@ class ClickerViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(ClickerUiState())
     val uiState: StateFlow<ClickerUiState> = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            while(true) {
+                onSecond()
+                delay(1.seconds)
+            }
+        }
+    }
+
     // Handle business logic
     fun click() {
         _uiState.update { currentState ->
             currentState.copy(
                 point = currentState.point + currentState.perClick
+            )
+        }
+    }
+
+    fun onSecond() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                point = currentState.point + currentState.perSecond
             )
         }
     }
@@ -51,7 +72,6 @@ class ClickerViewModel : ViewModel() {
         }
     }
 
-    // TODO: Auto Clicker
     fun upgradeAutoClicker(upgrade: Upgrade) {
         _uiState.update { currentState ->
             val upgrades = currentState.upgrades.map {
