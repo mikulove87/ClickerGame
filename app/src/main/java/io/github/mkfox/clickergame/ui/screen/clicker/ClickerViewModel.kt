@@ -1,6 +1,8 @@
 package io.github.mkfox.clickergame.ui.screen.clicker
 
 import androidx.lifecycle.ViewModel
+import io.github.mkfox.clickergame.data.Upgrade
+import io.github.mkfox.clickergame.data.Upgrades
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,9 +10,9 @@ import kotlinx.coroutines.flow.update
 
 data class ClickerUiState(
     val point: Double = 0.0,
-    val gain: Double = 1.0,
-    val pointerCost: Double = 10.0,
-    val autoClickerCost: Double = 100.0
+    val perClick: Double = 1.0,
+    val perSecond: Double = 0.0,
+    val upgrades: List<Upgrade> = Upgrades,
 )
 
 class ClickerViewModel : ViewModel() {
@@ -23,26 +25,42 @@ class ClickerViewModel : ViewModel() {
     fun click() {
         _uiState.update { currentState ->
             currentState.copy(
-                point = currentState.point + currentState.gain
+                point = currentState.point + currentState.perClick
             )
         }
     }
 
-    fun upgradePointer() {
+    fun upgrade(index: Int) {
+        val upgrade = uiState.value.upgrades[index]
+        when (index) {
+            0 -> upgradePointer(upgrade)
+            1 -> upgradeAutoClicker(upgrade)
+        }
+    }
+
+    fun upgradePointer(upgrade: Upgrade) {
         _uiState.update { currentState ->
+            val upgrades = currentState.upgrades.map {
+                if (it == upgrade) it.copy(cost = it.cost * 1.2) else it
+            }
             currentState.copy(
-                point = currentState.point - currentState.pointerCost,
-                gain = currentState.gain + 1,
-                pointerCost = currentState.pointerCost * 1.2
+                point = currentState.point - upgrade.cost,
+                perClick = currentState.perClick + 1,
+                upgrades = upgrades
             )
         }
     }
 
     // TODO: Auto Clicker
-    fun upgradeAutoClicker() {
+    fun upgradeAutoClicker(upgrade: Upgrade) {
         _uiState.update { currentState ->
+            val upgrades = currentState.upgrades.map {
+                if (it == upgrade) it.copy(cost = it.cost * 1.3) else it
+            }
             currentState.copy(
-                point = currentState.point - currentState.autoClickerCost
+                point = currentState.point - upgrade.cost,
+                perSecond = currentState.perSecond + 0.2,
+                upgrades = upgrades
             )
         }
     }

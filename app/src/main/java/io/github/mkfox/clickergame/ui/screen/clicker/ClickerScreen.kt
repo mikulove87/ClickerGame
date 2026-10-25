@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.mkfox.clickergame.data.Upgrade
 import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 
 @Composable
@@ -35,7 +38,9 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Clicker(
-                point = uiState.point, gain = uiState.gain,
+                point = uiState.point,
+                perClick = uiState.perClick,
+                perSecond = uiState.perSecond,
                 onClick = { viewModel.click() },
                 modifier = Modifier.weight(1f)
             )
@@ -46,24 +51,17 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                 modifier = Modifier.weight(1f)
             ) {
                 Text("Upgrade Menu")
-                UpgradeCard(
-                    title = "Pointer",
-                    cost = uiState.pointerCost,
-                    currentPoint = uiState.point,
-                    onUpgrade = {
-                        viewModel.upgradePointer()
-                    },
-                    description = "More points per click!"
-                )
-                UpgradeCard(
-                    title = "Auto Clicker",
-                    cost = uiState.autoClickerCost,
-                    currentPoint = uiState.point,
-                    onUpgrade = {
-                        viewModel.upgradeAutoClicker()
-                    },
-                    description = "TODO: Auto Clicker"
-                )
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    itemsIndexed(uiState.upgrades) { index, item ->
+                        UpgradeCard(
+                            upgrade = item,
+                            currentPoint = uiState.point,
+                            onUpgrade = {
+                                viewModel.upgrade(index)
+                            },
+                        )
+                    }
+                }
             }
         }
     }
@@ -72,7 +70,8 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
 @Composable
 fun Clicker(
     point: Double,
-    gain: Double,
+    perClick: Double,
+    perSecond: Double,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -82,7 +81,8 @@ fun Clicker(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Point: %.0f".format(point), style = MaterialTheme.typography.titleLarge)
-        Text("+%.0f per click".format(gain), style = MaterialTheme.typography.bodyLarge)
+        Text("+%.0f per click".format(perClick))
+        Text("+%.1f/s".format(perSecond))
         Spacer(Modifier.height(16.dp))
         Button(onClick = onClick) {
             Text("Click here")
@@ -92,11 +92,9 @@ fun Clicker(
 
 @Composable
 fun UpgradeCard(
-    title: String,
-    cost: Double,
+    upgrade: Upgrade,
     currentPoint: Double,
-    onUpgrade: (Double) -> Unit,
-    description: String = "",
+    onUpgrade: () -> Unit,
 ) {
     Card(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         Row(
@@ -104,13 +102,15 @@ fun UpgradeCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-                Text("Cost: %.0f points".format(cost), style = MaterialTheme.typography.labelLarge)
-                Text(description, style = MaterialTheme.typography.bodySmall)
+                Text(upgrade.title, style = MaterialTheme.typography.titleMedium)
+                Text("Cost: %.0f points".format(upgrade.cost), style = MaterialTheme.typography.labelLarge)
+                if (upgrade.description != null) {
+                    Text(upgrade.description, style = MaterialTheme.typography.bodySmall)
+                }
             }
             OutlinedButton(
-                onClick = { onUpgrade(cost) },
-                enabled = currentPoint >= cost
+                onClick = { onUpgrade() },
+                enabled = currentPoint >= upgrade.cost
             ) {
                 Text("Upgrade")
             }
@@ -122,13 +122,26 @@ fun UpgradeCard(
 @Composable
 fun UpgradeCardPreview() {
     ClickerGameTheme {
-        UpgradeCard(
-            title = "Pointer",
-            cost = 10.0,
-            currentPoint = 10.0,
-            onUpgrade = {},
-            description = "Descrioption"
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            UpgradeCard(
+                Upgrade(
+                    title = "Pointer",
+                    description = "Description",
+                    cost = 10.0
+                ),
+                currentPoint = 10.0,
+                onUpgrade = {},
+
+            )
+            UpgradeCard(
+                Upgrade(
+                    title = "No description",
+                    cost = 10.0
+                ),
+                currentPoint = 10.0,
+                onUpgrade = {}
+            )
+        }
     }
 }
 
