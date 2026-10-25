@@ -2,6 +2,7 @@ package io.github.mkfox.clickergame.ui.screen.clicker
 
 import androidx.lifecycle.ViewModel
 import io.github.mkfox.clickergame.data.Upgrade
+import io.github.mkfox.clickergame.data.Upgrades
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,7 @@ data class ClickerUiState(
     val point: Double = 0.0,
     val perClick: Double = 1.0,
     val perSecond: Double = 0.0,
-    val upgrades: List<Upgrade> = emptyList(),
+    val upgrades: List<Upgrade> = Upgrades,
 )
 
 class ClickerViewModel : ViewModel() {
@@ -19,22 +20,6 @@ class ClickerViewModel : ViewModel() {
     // Expose screen UI state
     private val _uiState = MutableStateFlow(ClickerUiState())
     val uiState: StateFlow<ClickerUiState> = _uiState.asStateFlow()
-
-    init {
-        addList()
-    }
-
-    fun addList() {
-        val list = listOf(
-            Upgrade("Pointer", "More points per click!", cost = 10.0),
-            Upgrade("Auto Clicker", "TODO: Auto Clicker", cost = 50.0),
-        )
-        _uiState.update { currentState ->
-            currentState.copy(
-                upgrades = list
-            )
-        }
-    }
 
     // Handle business logic
     fun click() {
@@ -47,11 +32,12 @@ class ClickerViewModel : ViewModel() {
 
     fun upgrade(index: Int) {
         val upgrade = uiState.value.upgrades[index]
-        when(index) {
+        when (index) {
             0 -> upgradePointer(upgrade)
             1 -> upgradeAutoClicker(upgrade)
         }
     }
+
     fun upgradePointer(upgrade: Upgrade) {
         _uiState.update { currentState ->
             val upgrades = currentState.upgrades.map {
