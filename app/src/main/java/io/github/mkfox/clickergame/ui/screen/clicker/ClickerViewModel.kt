@@ -46,27 +46,35 @@ class ClickerViewModel : ViewModel() {
     }
 
     fun upgrade(index: Int) {
+        val upgrade = uiState.value.upgrades[index]
         when(index) {
-            // TODO: increase upgrade cost
-            0 -> upgradePointer(uiState.value.upgrades[0].cost)
-            1 -> upgradeAutoClicker(uiState.value.upgrades[1].cost)
+            0 -> upgradePointer(upgrade)
+            1 -> upgradeAutoClicker(upgrade)
         }
     }
-    fun upgradePointer(cost: Double) {
+    fun upgradePointer(upgrade: Upgrade) {
         _uiState.update { currentState ->
+            val upgrades = currentState.upgrades.map {
+                if (it == upgrade) it.copy(cost = it.cost * 1.2) else it
+            }
             currentState.copy(
-                point = currentState.point - cost,
+                point = currentState.point - upgrade.cost,
                 perClick = currentState.perClick + 1,
+                upgrades = upgrades
             )
         }
     }
 
     // TODO: Auto Clicker
-    fun upgradeAutoClicker(cost: Double) {
+    fun upgradeAutoClicker(upgrade: Upgrade) {
         _uiState.update { currentState ->
+            val upgrades = currentState.upgrades.map {
+                if (it == upgrade) it.copy(cost = it.cost * 1.3) else it
+            }
             currentState.copy(
-                point = currentState.point - cost,
-                perSecond = currentState.perSecond + 0.1,
+                point = currentState.point - upgrade.cost,
+                perSecond = currentState.perSecond + 0.2,
+                upgrades = upgrades
             )
         }
     }
