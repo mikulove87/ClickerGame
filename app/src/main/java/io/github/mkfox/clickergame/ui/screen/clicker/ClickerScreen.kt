@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -84,8 +85,13 @@ fun Clicker(
         Text("+%.0f per click".format(perClick))
         Text("+%.1f/s".format(perSecond))
         Spacer(Modifier.height(16.dp))
-        Button(onClick = onClick) {
-            Text("Click here")
+
+        val size = ButtonDefaults.LargeContainerHeight
+        Button(
+            onClick = onClick,
+            contentPadding = ButtonDefaults.contentPaddingFor(size)
+        ) {
+            Text("Click here", style = ButtonDefaults.textStyleFor(size))
         }
     }
 }
