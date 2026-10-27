@@ -1,5 +1,7 @@
 package io.github.mkfox.clickergame.ui.screen.clicker
 
+import android.content.Intent
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import io.github.mkfox.clickergame.R
 import io.github.mkfox.clickergame.data.Upgrade
 import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
@@ -43,6 +46,7 @@ import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 @Composable
 fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val activity = LocalActivity.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -65,14 +69,19 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("License") },
+                                text = { Text("Licenses") },
                                 leadingIcon = {
                                     Icon(
                                         painterResource(R.drawable.article_24px),
                                         contentDescription = null
                                     )
                                 },
-                                onClick = { expanded = false }
+                                onClick = {
+                                    val intent =
+                                        Intent(activity, OssLicensesMenuActivity::class.java)
+                                    activity?.startActivity(intent)
+                                    expanded = false
+                                }
                             )
                         }
                     }
