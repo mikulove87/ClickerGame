@@ -66,6 +66,16 @@ class ClickerViewModel : ViewModel() {
                 updateCost(upgrade, 1.3)
                 updateGain(perSecond = 0.2)
             }
+
+            2 -> {
+                updateCost(upgrade, 1.3)
+                updateGain(perClick = 2.0)
+            }
+
+            3 -> {
+                updateCost(upgrade, 1.5)
+                updateGain(perSecond = 1.0)
+            }
         }
     }
 
