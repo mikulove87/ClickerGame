@@ -123,7 +123,8 @@ fun UpgradeCard(
             }
             OutlinedButton(
                 onClick = { onUpgrade() },
-                enabled = currentPoint >= upgrade.cost
+                enabled = currentPoint >= upgrade.cost,
+                shapes = ButtonDefaults.shapes()
             ) {
                 Text("Upgrade")
             }
