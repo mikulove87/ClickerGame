@@ -51,7 +51,7 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Upgrade Menu")
+                Text("Upgrades")
                 LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     itemsIndexed(uiState.upgrades) { index, item ->
                         UpgradeCard(
@@ -91,7 +91,7 @@ fun Clicker(
             onClick = onClick,
             contentPadding = ButtonDefaults.contentPaddingFor(size)
         ) {
-            Text("Click here", style = ButtonDefaults.textStyleFor(size))
+            Text("Click here!", style = ButtonDefaults.textStyleFor(size))
         }
     }
 }
