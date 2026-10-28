@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,13 +20,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -125,6 +129,7 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun Clicker(
     point: Double,
@@ -143,13 +148,14 @@ fun Clicker(
         Text("+%.1f/s".format(perSecond))
         Spacer(Modifier.height(16.dp))
 
-        val size = ButtonDefaults.LargeContainerHeight
+        val size = ButtonDefaults.ExtraLargeContainerHeight
+        // TODO: Use morph shaping
+        // TODO: Use total points instead of current points
         Button(
             onClick = onClick,
-            contentPadding = ButtonDefaults.contentPaddingFor(size)
-        ) {
-            Text("Click here!", style = ButtonDefaults.textStyleFor(size))
-        }
+            modifier = Modifier.size(size),
+            shape = if (point < 1) MaterialShapes.Circle.toShape() else MaterialShapes.Sunny.toShape()
+        ) {}
     }
 }
 
