@@ -1,7 +1,7 @@
 package io.github.mkfox.clickergame.ui.screen.clicker
 
 import android.content.Intent
-import androidx.activity.compose.LocalActivity
+import android.content.Intent.ACTION_SEND
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,7 @@ import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 @Composable
 fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val activity = LocalActivity.current
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -69,6 +70,25 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             DropdownMenuItem(
+                                text = { Text("Share") },
+                                leadingIcon = {
+                                    Icon(
+                                        painterResource(R.drawable.share),
+                                        contentDescription = null
+                                    )
+                                },
+                                onClick = {
+                                    val intent: Intent = Intent().apply {
+                                        action = ACTION_SEND
+                                        putExtra(Intent.EXTRA_TEXT, "%.0f Points\nhttps://github.com/mikulove87/ClickerGame".format(uiState.point))
+                                        type = "text/plain"
+                                    }
+
+                                    val shareIntent = Intent.createChooser(intent, null)
+                                    context.startActivity(shareIntent)
+                                }
+                            )
+                            DropdownMenuItem(
                                 text = { Text("Licenses") },
                                 leadingIcon = {
                                     Icon(
@@ -78,8 +98,8 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                                 },
                                 onClick = {
                                     val intent =
-                                        Intent(activity, OssLicensesMenuActivity::class.java)
-                                    activity?.startActivity(intent)
+                                        Intent(context, OssLicensesMenuActivity::class.java)
+                                    context.startActivity(intent)
                                     expanded = false
                                 }
                             )
