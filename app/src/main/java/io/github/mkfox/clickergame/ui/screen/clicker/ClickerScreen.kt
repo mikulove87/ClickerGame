@@ -80,7 +80,12 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                                 onClick = {
                                     val intent: Intent = Intent().apply {
                                         action = ACTION_SEND
-                                        putExtra(Intent.EXTRA_TEXT, "%.0f Points\nhttps://github.com/mikulove87/ClickerGame".format(uiState.point))
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "%.0f Points\nhttps://github.com/mikulove87/ClickerGame".format(
+                                                uiState.point
+                                            )
+                                        )
                                         type = "text/plain"
                                     }
 
