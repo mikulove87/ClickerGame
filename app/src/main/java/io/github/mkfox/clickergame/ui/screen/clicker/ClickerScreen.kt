@@ -45,7 +45,10 @@ import io.github.mkfox.clickergame.data.Upgrade
 import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 
 @Composable
-fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
+fun ClickerScreen(
+    onStats: () -> Unit = {},
+    viewModel: ClickerViewModel = viewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     Scaffold(
@@ -79,6 +82,7 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                                 },
                                 onClick = {
                                     // TODO: Show Statistics
+                                    onStats()
                                     expanded = false
                                 }
                             )
