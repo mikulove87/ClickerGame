@@ -70,6 +70,19 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             DropdownMenuItem(
+                                text = { Text("Stats") },
+                                leadingIcon = {
+                                    Icon(
+                                        painterResource(R.drawable.leaderboard),
+                                        contentDescription = null
+                                    )
+                                },
+                                onClick = {
+                                    // TODO: Show Statistics
+                                    expanded = false
+                                }
+                            )
+                            DropdownMenuItem(
                                 text = { Text("Share") },
                                 leadingIcon = {
                                     Icon(
