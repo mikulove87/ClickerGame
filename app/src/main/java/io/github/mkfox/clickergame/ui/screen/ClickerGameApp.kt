@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.mkfox.clickergame.ui.screen.clicker.ClickerScreen
+import io.github.mkfox.clickergame.ui.screen.stats.StatsScreen
 
 
 @Composable
@@ -16,7 +17,7 @@ fun ClickerGameApp() {
             ClickerScreen(onStats = { navController.navigate("/statistics") })
         }
         composable("/statistics") {
-
+            StatsScreen()
         }
     }
 }

@@ -81,7 +81,6 @@ fun ClickerScreen(
                                     )
                                 },
                                 onClick = {
-                                    // TODO: Show Statistics
                                     onStats()
                                     expanded = false
                                 }
