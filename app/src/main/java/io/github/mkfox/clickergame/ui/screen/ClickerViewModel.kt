@@ -1,4 +1,4 @@
-package io.github.mkfox.clickergame.ui.screen.clicker
+package io.github.mkfox.clickergame.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

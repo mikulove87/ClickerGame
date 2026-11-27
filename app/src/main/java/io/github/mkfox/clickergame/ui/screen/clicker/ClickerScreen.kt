@@ -42,12 +42,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import io.github.mkfox.clickergame.R
 import io.github.mkfox.clickergame.data.Upgrade
+import io.github.mkfox.clickergame.ui.screen.ClickerViewModel
 import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 
 @Composable
 fun ClickerScreen(
-    onStats: () -> Unit = {},
-    viewModel: ClickerViewModel = viewModel()
+    viewModel: ClickerViewModel,
+    onStats: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -262,6 +263,6 @@ fun UpgradeCardPreview() {
 @Composable
 fun AppPreview() {
     ClickerGameTheme {
-        ClickerScreen()
+        ClickerScreen(viewModel = viewModel())
     }
 }
