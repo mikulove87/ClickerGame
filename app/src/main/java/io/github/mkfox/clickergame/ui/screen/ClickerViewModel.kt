@@ -17,6 +17,8 @@ data class ClickerUiState(
     val perClick: Double = 1.0,
     val perSecond: Double = 0.0,
     val upgrades: List<Upgrade> = InitialUpgrades,
+    val click: Long = 0,
+    val pointTotal: Double = 0.0,
 )
 
 class ClickerViewModel : ViewModel() {
@@ -39,7 +41,9 @@ class ClickerViewModel : ViewModel() {
     fun click() {
         _uiState.update { currentState ->
             currentState.copy(
-                point = currentState.point + currentState.perClick
+                point = currentState.point + currentState.perClick,
+                click = currentState.click + 1,
+                pointTotal = currentState.pointTotal + currentState.perClick
             )
         }
     }
@@ -47,7 +51,8 @@ class ClickerViewModel : ViewModel() {
     fun onSecond() {
         _uiState.update { currentState ->
             currentState.copy(
-                point = currentState.point + currentState.perSecond
+                point = currentState.point + currentState.perSecond,
+                pointTotal = currentState.pointTotal + currentState.perSecond
             )
         }
     }

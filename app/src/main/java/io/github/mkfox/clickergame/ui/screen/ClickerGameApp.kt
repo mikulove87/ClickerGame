@@ -23,7 +23,7 @@ fun ClickerGameApp(viewModel: ClickerViewModel = viewModel()) {
                 onStats = { navController.navigate("/statistics") })
         }
         composable("/statistics") {
-            StatsScreen(value = uiState.point)
+            StatsScreen(uiState = uiState)
         }
     }
 }

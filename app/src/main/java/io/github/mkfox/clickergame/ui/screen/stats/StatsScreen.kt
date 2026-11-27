@@ -11,10 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.github.mkfox.clickergame.ui.screen.ClickerUiState
 import io.github.mkfox.clickergame.ui.theme.ClickerGameTheme
 
 @Composable
-fun StatsScreen(value: Double = 0.0) {
+fun StatsScreen(uiState: ClickerUiState) {
     Scaffold { innerPadding ->
         // TODO: Stats Screen
         Column(
@@ -25,7 +26,9 @@ fun StatsScreen(value: Double = 0.0) {
                 .padding(8.dp)
         ) {
             Text("Stats Screen", style = MaterialTheme.typography.displayMedium)
-            Text("$value points")
+            Text("${uiState.point} points")
+            Text("${uiState.pointTotal} points total")
+            Text("${uiState.click} clicks total")
         }
     }
 }
@@ -33,7 +36,12 @@ fun StatsScreen(value: Double = 0.0) {
 @Preview
 @Composable
 private fun StatsScreenPreview() {
+    val sample = ClickerUiState(
+        point = 12.3,
+        pointTotal = 24.6,
+        click = 64
+    )
     ClickerGameTheme {
-        StatsScreen()
+        StatsScreen(sample)
     }
 }
