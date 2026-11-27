@@ -91,6 +91,7 @@ fun ClickerScreen(viewModel: ClickerViewModel = viewModel()) {
 
                                     val shareIntent = Intent.createChooser(intent, null)
                                     context.startActivity(shareIntent)
+                                    expanded = false
                                 }
                             )
                             DropdownMenuItem(
